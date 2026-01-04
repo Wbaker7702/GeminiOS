@@ -82,14 +82,20 @@ export const Taskbar: React.FC<TaskbarProps> = ({
 
       {/* System Tray */}
       <div className="flex items-center gap-3 px-3">
-        <div className="flex flex-col items-center justify-center leading-none select-none">
+        <button 
+          onClick={() => {
+            const settingsApp = allApps.find(a => a.id === 'settings_app');
+            if (settingsApp) onLaunchApp(settingsApp);
+          }}
+          className="flex flex-col items-center justify-center leading-none select-none hover:bg-black/5 px-2 rounded cursor-pointer transition-colors"
+        >
           <span className="text-xs font-bold text-gray-800">
             {time.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
           </span>
           <span className="text-[10px] text-gray-500 font-medium">
             {time.toLocaleDateString([], { month: 'short', day: 'numeric' })}
           </span>
-        </div>
+        </button>
         <button 
           onClick={() => window.dispatchEvent(new CustomEvent('show-desktop'))}
           className="w-1 h-8 rounded-full bg-gray-300/50 hover:bg-gray-400/50 transition-colors"

@@ -44,6 +44,7 @@ const App: React.FC = () => {
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [contextMenu, setContextMenu] = useState<{ x: number; y: number; show: boolean } | null>(null);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [selectedIconId, setSelectedIconId] = useState<string | null>(null);
 
   // App Management State
   const [openApps, setOpenApps] = useState<OpenAppState[]>([]);
@@ -100,7 +101,10 @@ const App: React.FC = () => {
   const contextMenuItems: ContextMenuItem[] = [
     { label: 'Refresh', action: handleRefresh, shortcut: 'F5' },
     { label: 'Change Wallpaper', action: handleWallpaperChange },
-    { label: 'System Properties', action: () => addNotification('Gemini OS', 'Version 2.0.0\nMemory: 16GB\nProcessor: Gemini Ultra', 'info') },
+    { label: 'System Properties', action: () => {
+      const myComputerApp = APP_DEFINITIONS_CONFIG.find(app => app.id === 'my_computer');
+      if (myComputerApp) handleAppOpen(myComputerApp);
+    }},
   ];
 
   const bringToFront = (instanceId: string) => {
@@ -276,11 +280,18 @@ const App: React.FC = () => {
             setActiveAppId(null);
             setContextMenu(null);
             setIsSearchOpen(false);
+            setSelectedIconId(null);
           }}
           onContextMenu={handleContextMenu}
         >
           {APP_DEFINITIONS_CONFIG.map((app) => (
-            <Icon key={app.id} app={app} onInteract={() => handleAppOpen(app)} />
+            <Icon 
+              key={app.id} 
+              app={app} 
+              onOpen={() => handleAppOpen(app)} 
+              onSelect={() => setSelectedIconId(app.id)}
+              isSelected={selectedIconId === app.id}
+            />
           ))}
         </div>
 
