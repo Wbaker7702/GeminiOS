@@ -52,7 +52,7 @@ const App: React.FC = () => {
   const [zIndexCounter, setZIndexCounter] = useState(100);
   const [maxHistoryLength, setMaxHistoryLength] = useState(INITIAL_MAX_HISTORY_LENGTH);
   const [isStatefulnessEnabled, setIsStatefulnessEnabled] = useState(false);
-    const [appContentCache] = useState<Record<string, string>>({});
+    const [appContentCache, setAppContentCache] = useState<Record<string, string>>({});
 
   // Global show desktop listener
   useEffect(() => {
