@@ -54,14 +54,14 @@ export const BootScreen: React.FC<BootScreenProps> = ({ onComplete }) => {
       style={{ opacity }}
     >
       <div className={`transition-all duration-1000 transform ${showLogo ? 'scale-100 opacity-100' : 'scale-95 opacity-0'}`}>
-        <div className="text-6xl mb-6 text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-500 font-bold tracking-tighter">
+        <div className="text-8xl mb-8 font-bold tracking-tighter bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-blue-600 animate-pulse">
           Gemini OS
         </div>
       </div>
 
-      <div className="w-64 h-1 bg-gray-800 rounded-full overflow-hidden mb-4 relative">
+      <div className="w-80 h-1.5 bg-gray-800 rounded-full overflow-hidden mb-6 relative shadow-inner">
         <div 
-          className="h-full bg-blue-500 transition-all duration-300 ease-out shadow-[0_0_10px_rgba(59,130,246,0.5)]"
+          className="h-full bg-gradient-to-r from-cyan-400 to-blue-600 transition-all duration-300 ease-out shadow-[0_0_15px_rgba(34,211,238,0.6)]"
           style={{ width: `${progress}%` }}
         />
       </div>

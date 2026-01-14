@@ -36,11 +36,11 @@ export const Icon: React.FC<IconProps> = ({ app, onOpen, onSelect, isSelected })
       role="button"
       aria-label={`Open ${app.name}`}
     >
-      <div className="text-5xl mb-1.5 drop-shadow-md group-hover:drop-shadow-lg transition-all group-hover:-translate-y-1">
+      <div className="text-5xl mb-2 drop-shadow-[0_4px_6px_rgba(0,0,0,0.3)] group-hover:drop-shadow-[0_8px_12px_rgba(0,0,0,0.4)] transition-all group-hover:-translate-y-2 transform duration-300">
         {app.icon}
       </div>
-      <div className={`text-[11px] font-bold break-words max-w-full leading-tight drop-shadow-sm px-1 rounded backdrop-blur-sm ${
-        isSelected ? 'text-blue-900 bg-blue-100/50' : 'text-gray-700 bg-white/20'
+      <div className={`text-[12px] font-medium tracking-wide break-words max-w-full leading-tight drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)] px-2 py-0.5 rounded-md transition-colors ${
+        isSelected ? 'text-white bg-blue-600/80 shadow-sm' : 'text-white/90 group-hover:text-white'
       }`}>
         {app.name}
       </div>
