@@ -3,14 +3,15 @@
  * SPDX-License-Identifier: Apache-2.0
 */
 /* tslint:disable */
-import React, {useEffect, useRef} from 'react';
+import React, {useEffect, useRef, useMemo} from 'react';
 import {InteractionData} from '../types';
+import DOMPurify from 'dompurify';
 
 interface GeneratedContentProps {
   htmlContent: string;
   onInteract: (data: InteractionData) => void;
   appContext: string | null;
-  isLoading: boolean; // Added isLoading prop
+  isLoading: boolean;
 }
 
 export const GeneratedContent: React.FC<GeneratedContentProps> = ({
@@ -20,7 +21,17 @@ export const GeneratedContent: React.FC<GeneratedContentProps> = ({
   isLoading,
 }) => {
   const contentRef = useRef<HTMLDivElement>(null);
-  const processedHtmlContentRef = useRef<string | null>(null); // Ref to track processed content
+  const processedHtmlContentRef = useRef<string | null>(null);
+
+  // Sanitize content with DOMPurify
+  const sanitizedContent = useMemo(() => {
+    return DOMPurify.sanitize(htmlContent, {
+      ADD_TAGS: ['script', 'iframe', 'video', 'canvas'], // Allow scripts and other interactive elements
+      ADD_ATTR: ['target', 'allow', 'allowfullscreen', 'autoplay', 'muted', 'playsinline', 'controls', 'data-interaction-id', 'data-interaction-type', 'data-interaction-value', 'data-value-from', 'src', 'class', 'id', 'type', 'style', 'width', 'height'],
+      WHOLE_DOCUMENT: false,
+      FORCE_BODY: true,
+    });
+  }, [htmlContent]);
 
   useEffect(() => {
     const container = contentRef.current;
@@ -48,7 +59,7 @@ export const GeneratedContent: React.FC<GeneratedContentProps> = ({
             targetElement.dataset.valueFrom,
           ) as HTMLInputElement | HTMLTextAreaElement;
           if (inputElement) {
-            interactionValue = inputElement.value;
+            interactionValue = DOMPurify.sanitize(inputElement.value); // Sanitize input value
           }
         }
 
@@ -74,13 +85,12 @@ export const GeneratedContent: React.FC<GeneratedContentProps> = ({
 
     // Process scripts only when loading is complete and content has changed
     if (!isLoading) {
-      if (htmlContent !== processedHtmlContentRef.current) {
-        // Fix: Explicitly cast elements to HTMLScriptElement to avoid unknown property errors
+      // Use sanitized content for processing check
+      if (sanitizedContent !== processedHtmlContentRef.current) {
         const scripts = Array.from(container.getElementsByTagName('script')) as HTMLScriptElement[];
         scripts.forEach((oldScript) => {
           try {
             const newScript = document.createElement('script');
-            // Fix: Explicitly type attr as Attr for type safety
             Array.from(oldScript.attributes).forEach((attr: Attr) =>
               newScript.setAttribute(attr.name, attr.value),
             );
@@ -96,7 +106,7 @@ export const GeneratedContent: React.FC<GeneratedContentProps> = ({
             }
           } catch (e) {
             console.error(
-              'Error processing/executing script tag. This usually indicates a syntax error in the LLM-generated script.',
+              'Error processing/executing script tag.',
               {
                 scriptContent:
                   oldScript.innerHTML.substring(0, 500) +
@@ -106,24 +116,22 @@ export const GeneratedContent: React.FC<GeneratedContentProps> = ({
             );
           }
         });
-        processedHtmlContentRef.current = htmlContent; // Mark this content as processed
+        processedHtmlContentRef.current = sanitizedContent;
       }
     } else {
-      // If loading, reset the processed content ref. This ensures that when loading finishes,
-      // the new content (even if identical to a previous state before loading) is processed.
       processedHtmlContentRef.current = null;
     }
 
     return () => {
       container.removeEventListener('click', handleClick);
     };
-  }, [htmlContent, onInteract, appContext, isLoading]);
+  }, [sanitizedContent, onInteract, appContext, isLoading]);
 
   return (
     <div
       ref={contentRef}
       className="w-full h-full overflow-y-auto"
-      dangerouslySetInnerHTML={{__html: htmlContent}}
+      dangerouslySetInnerHTML={{__html: sanitizedContent}}
     />
   );
 };
