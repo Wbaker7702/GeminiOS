@@ -43,7 +43,7 @@ export async function* streamAppContent(
   // Default: 'gemini-flash-lite-latest' (Flash Lite) for fast, general UI generation.
   // Complex/Assistant: 'gemini-3-pro-preview' for advanced reasoning and chat.
   let model = 'gemini-flash-lite-latest';
-  let config: any = {};
+  const config: { thinkingConfig?: { thinkingBudget: number } } = {};
 
   if (appContext === 'gemini_assistant') {
     model = 'gemini-3-pro-preview';

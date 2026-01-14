@@ -30,7 +30,7 @@ export const Taskbar: React.FC<TaskbarProps> = ({
   }, []);
 
   return (
-    <div className="fixed bottom-4 left-1/2 -translate-x-1/2 h-14 px-2 py-1.5 bg-white/70 backdrop-blur-xl border border-white/40 shadow-2xl rounded-2xl flex items-center gap-1 z-[1000]">
+    <div className="fixed bottom-4 left-1/2 -translate-x-1/2 h-16 px-3 py-2 bg-white/40 backdrop-blur-2xl border border-white/20 shadow-[0_20px_40px_rgba(0,0,0,0.2)] rounded-3xl flex items-center gap-2 z-[1000] transition-all hover:bg-white/50">
       {/* Search Button */}
       <button
         onClick={onToggleSearch}
@@ -55,8 +55,8 @@ export const Taskbar: React.FC<TaskbarProps> = ({
             <button
               key={app.id}
               onClick={() => isOpen ? onAppClick(app.id) : onLaunchApp(app)}
-              className={`relative group w-11 h-11 flex items-center justify-center rounded-xl transition-all duration-300 hover:scale-110 active:scale-95 ${
-                isActive ? 'bg-white/50 shadow-sm' : 'hover:bg-white/30'
+              className={`relative group w-12 h-12 flex items-center justify-center rounded-2xl transition-all duration-300 hover:scale-110 active:scale-95 ${
+                isActive ? 'bg-white/40 shadow-inner' : 'hover:bg-white/20'
               }`}
               title={app.name}
             >
