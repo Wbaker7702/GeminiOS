@@ -39,7 +39,6 @@ const MenuItem: React.FC<{
 );
 
 export const Window: React.FC<WindowProps> = ({
-  id,
   title,
   children,
   onClose,

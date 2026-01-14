@@ -52,7 +52,7 @@ const App: React.FC = () => {
   const [zIndexCounter, setZIndexCounter] = useState(100);
   const [maxHistoryLength, setMaxHistoryLength] = useState(INITIAL_MAX_HISTORY_LENGTH);
   const [isStatefulnessEnabled, setIsStatefulnessEnabled] = useState(false);
-  const [appContentCache, setAppContentCache] = useState<Record<string, string>>({});
+    const [appContentCache] = useState<Record<string, string>>({});
 
   // Global show desktop listener
   useEffect(() => {
@@ -138,7 +138,7 @@ const App: React.FC = () => {
         setOpenApps(prev => prev.map(app => 
           app.id === instanceId ? { ...app, isLoading: false, content: accumulatedContent } : app
         ));
-      } catch (e: any) {
+      } catch {
         setOpenApps(prev => prev.map(app => 
           app.id === instanceId ? { ...app, isLoading: false, error: 'Failed to stream content.', content: `<div class="p-4 text-red-600 bg-red-100 rounded-md">Error loading content.</div>` } : app
         ));
@@ -165,7 +165,7 @@ const App: React.FC = () => {
     // Create the initial history. 
     // If an initialQuery is present (e.g., from Search Explorer), we simulate a user interaction 
     // to prompt the LLM to handle that query immediately.
-    let history: InteractionData[] = [{
+    const history: InteractionData[] = [{
       id: appDef.id,
       type: 'app_open',
       elementText: appDef.name,
