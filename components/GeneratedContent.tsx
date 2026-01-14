@@ -26,7 +26,7 @@ export const GeneratedContent: React.FC<GeneratedContentProps> = ({
   // Sanitize content with DOMPurify
   const sanitizedContent = useMemo(() => {
     return DOMPurify.sanitize(htmlContent, {
-      ADD_TAGS: ['script', 'iframe', 'video', 'canvas'], // Allow scripts and other interactive elements
+      ADD_TAGS: ['iframe', 'video', 'canvas'], // Allow interactive but not scriptable elements
       ADD_ATTR: ['target', 'allow', 'allowfullscreen', 'autoplay', 'muted', 'playsinline', 'controls', 'data-interaction-id', 'data-interaction-type', 'data-interaction-value', 'data-value-from', 'src', 'class', 'id', 'type', 'style', 'width', 'height'],
       WHOLE_DOCUMENT: false,
       FORCE_BODY: true,
